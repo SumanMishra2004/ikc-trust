@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #F8F5ED;
+    color: #292B27;
+    font-family: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F8F5ED;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D9D2C5;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B9674B;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: #B9674B;
+    color: #FFFDF8;
+  }
+
+  /* Zero border radius globally (design system requirement) */
+  *,
+  *::before,
+  *::after {
+    border-radius: 0 !important;
+  }
+
+  /* Exception: only circular elements use full radius */
+  .rounded-full {
+    border-radius: 9999px !important;
+  }
+
+  /* Exception: floating dock navbar */
+  .floating-dock {
+    border-radius: 1rem !important;
+  }
+  .floating-dock-mobile-menu {
+    border-radius: 0 0 1rem 1rem !important;
+  }
+  .floating-dock-cta {
+    border-radius: 0.5rem !important;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Section gutter */
+  .section-px {
+    @apply px-6 md:px-12 lg:px-20;
+  }
+
+  /* Hairline divider */
+  .hairline {
+    border-color: #D9D2C5;
+  }
+
+  /* Label uppercase tracking */
+  .label-track {
+    letter-spacing: 0.06em;
+  }
+  .label-track-wide {
+    letter-spacing: 0.1em;
+  }
+  .label-track-widest {
+    letter-spacing: 0.25em;
+  }
+
+  /* Terracotta accent bar */
+  .accent-bar::before {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 2px;
+    background-color: #B9674B;
+    margin-right: 0.75rem;
+    vertical-align: middle;
+  }
+}
+
+/* Framer Motion reduced-motion respect */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
