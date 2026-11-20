@@ -36,17 +36,16 @@ const components: Components = {
   pre: ({ children }) => <pre className="bg-sand p-4 overflow-x-auto font-mono text-[12px] text-charcoal my-4">{children}</pre>,
 };
 
-function truncateAtWords(text: string, wordLimit: number): string {
-  const words = text.split(/\s+/);
-  if (words.length <= wordLimit) return text;
-  return words.slice(0, wordLimit).join(" ") + "…";
+function truncateAtChars(text: string, charLimit: number): string {
+  if (text.length <= charLimit) return text;
+  const cut = text.lastIndexOf(" ", charLimit);
+  return text.slice(0, cut > 0 ? cut : charLimit) + "…";
 }
 
-export default function EnvironmentDescription({ markdown, collapseAfterWords = 300 }: Props) {
-  const wordCount = markdown.trim().split(/\s+/).length;
-  const isLong = wordCount > collapseAfterWords;
+export default function EnvironmentDescription({ markdown, collapseAfterWords = 400 }: Props) {
+  const isLong = markdown.length > collapseAfterWords;
   const [expanded, setExpanded] = useState(false);
-  const displayText = isLong && !expanded ? truncateAtWords(markdown, collapseAfterWords) : markdown;
+  const displayText = isLong && !expanded ? truncateAtChars(markdown, collapseAfterWords) : markdown;
 
   return (
     <div>

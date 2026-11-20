@@ -108,23 +108,23 @@ const components: Components = {
  * Splits on whitespace so Markdown syntax tokens count as words —
  * this avoids broken Markdown tags at the cut point.
  */
-function truncateAtWords(text: string, wordLimit: number): string {
-  const words = text.split(/\s+/);
-  if (words.length <= wordLimit) return text;
-  return words.slice(0, wordLimit).join(" ") + "…";
+function truncateAtChars(text: string, charLimit: number): string {
+  if (text.length <= charLimit) return text;
+  // Cut at a word boundary so we don't slice mid-word
+  const cut = text.lastIndexOf(" ", charLimit);
+  return text.slice(0, cut > 0 ? cut : charLimit) + "…";
 }
 
 export default function EducationDescription({
   markdown,
-  collapseAfterWords = 300,
+  collapseAfterWords = 400,
 }: Props) {
-  const wordCount = markdown.trim().split(/\s+/).length;
-  const isLong = wordCount > collapseAfterWords;
+  const isLong = markdown.length > collapseAfterWords;
   const [expanded, setExpanded] = useState(false);
 
   const displayText =
     isLong && !expanded
-      ? truncateAtWords(markdown, collapseAfterWords)
+      ? truncateAtChars(markdown, collapseAfterWords)
       : markdown;
 
   return (

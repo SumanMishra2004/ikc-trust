@@ -88,15 +88,15 @@ export const educationEvent = defineType({
       type: "text",
       rows: 20,
       description:
-        "Full narrative description of the event. Write in Markdown — supports headings (##, ###), bold (**text**), italic (*text*), bullet lists, numbered lists, blockquotes (>), and links. Minimum 1,000 words · Maximum 1,500 words.",
+        "Full narrative description of the event. Write in Markdown — supports headings (##, ###), bold (**text**), italic (*text*), bullet lists, numbered lists, blockquotes (>), and links. Minimum 1,000 characters · Maximum 1,500 characters.",
       validation: (Rule) =>
         Rule.required().custom((value: string | undefined) => {
           if (!value) return "Description is required.";
-          const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
-          if (wordCount < 1000)
-            return `Description is too short (${wordCount} words). Minimum is 1,000 words.`;
-          if (wordCount > 1500)
-            return `Description is too long (${wordCount} words). Maximum is 1,500 words.`;
+          const charCount = value.length;
+          if (charCount < 1000)
+            return `Description is too short (${charCount} characters). Minimum is 1,000 characters.`;
+          if (charCount > 1500)
+            return `Description is too long (${charCount} characters). Maximum is 1,500 characters.`;
           return true;
         }),
     }),
