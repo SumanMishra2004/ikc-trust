@@ -15,8 +15,7 @@ export default function AboutPage() {
   return (
     <main>
       <Header />
-      {/* Top spacing to clear the fixed floating-dock header */}
-      <div className="pt-20" />
+   
       <WhoWeAreSection />
       <VisionMissionSection />
       <JourneySection />

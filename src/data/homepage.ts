@@ -19,11 +19,62 @@ export const siteConfig = {
 
 export const navLinks = [
   { label: "About Us", href: "/about" },
-  { label: "Our Work", href: "#areas-of-work" },
   { label: "Our Impact", href: "#impact-metrics" },
-  { label: "Initiatives", href: "#initiatives" },
   { label: "Partnerships", href: "#partnerships" },
   { label: "Contact", href: "#contact" },
+];
+
+export type InitiativeNavItem = {
+  number: string;
+  label: string;
+  description: string;
+  href: string;
+  iconBg: string;
+};
+
+export const initiativeNavItems: InitiativeNavItem[] = [
+  {
+    number: "01",
+    label: "Education & Knowledge",
+    description: "Establishing schools, colleges, and skill development...",
+    href: "/initiatives/education",
+    iconBg: "bg-sky-500",
+  },
+  {
+    number: "02",
+    label: "Environment",
+    description: "Tree plantation, environmental awareness, wildlife...",
+    href: "/initiatives/environment",
+    iconBg: "bg-teal-500",
+  },
+  {
+    number: "03",
+    label: "Social Welfare",
+    description: "Supporting children, women, youth, senior citizens, an...",
+    href: "/initiatives/social-welfare",
+    iconBg: "bg-green-500",
+  },
+  {
+    number: "04",
+    label: "Healthcare & Medical",
+    description: "Establishing hospitals, health centers, mobile clinics,...",
+    href: "/initiatives/healthcare",
+    iconBg: "bg-orange-500",
+  },
+  {
+    number: "05",
+    label: "Disaster Relief",
+    description: "Providing emergency relief, rehabilitation, and...",
+    href: "/initiatives/disaster-relief",
+    iconBg: "bg-gray-500",
+  },
+  {
+    number: "06",
+    label: "Culture & Sports",
+    description: "Promoting Indian culture through arts, music, dance,...",
+    href: "/initiatives/culture-sports",
+    iconBg: "bg-pink-500",
+  },
 ];
 
 export const hero = {
