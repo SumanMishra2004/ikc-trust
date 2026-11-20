@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useState,
   useEffect,
   useRef,
   useCallback,
@@ -16,13 +15,21 @@ import EducationLightbox from "./EducationLightbox";
 
 interface Props {
   images: EducationEventImage[];
-  /** Unique event ID — used to scope gallery state */
   eventId: string;
+  /**
+   * "desktop" — gallery sits beside a text column.
+   *   The outer wrapper is h-full so it stretches to match the text column
+   *   height (the grid uses items-stretch). Next/Image uses fill + object-contain
+   *   so the whole image is always visible, never cropped. Sand fills letterbox.
+   *
+   * "mobile" — stacked single-column layout.
+   *   No inherited height. A fixed aspect-[4/3] frame caps the image so it
+   *   never dominates the screen on small devices.
+   */
+  layout?: "desktop" | "mobile";
 }
 
 const AUTOPLAY_INTERVAL = 4500;
-
-// ─── Reducer keeps gallery state strictly local ───────────────────────────────
 
 type GalleryAction =
   | { type: "PREV" }
@@ -47,11 +54,7 @@ function galleryReducer(
 ): GalleryState {
   switch (action.type) {
     case "PREV":
-      return {
-        ...state,
-        current: (state.current - 1 + total) % total,
-        playing: false,
-      };
+      return { ...state, current: (state.current - 1 + total) % total, playing: false };
     case "NEXT":
       return { ...state, current: (state.current + 1) % total };
     case "GOTO":
@@ -61,12 +64,7 @@ function galleryReducer(
     case "PAUSE":
       return { ...state, playing: false };
     case "OPEN_LIGHTBOX":
-      return {
-        ...state,
-        lightboxOpen: true,
-        lightboxIndex: action.index,
-        playing: false,
-      };
+      return { ...state, lightboxOpen: true, lightboxIndex: action.index, playing: false };
     case "CLOSE_LIGHTBOX":
       return { ...state, lightboxOpen: false };
     default:
@@ -74,147 +72,140 @@ function galleryReducer(
   }
 }
 
-export default function EducationGallery({ images, eventId }: Props) {
+export default function EducationGallery({ images, eventId, layout = "mobile" }: Props) {
   const total = images.length;
 
   const [state, rawDispatch] = useReducer(
     (s: GalleryState, a: GalleryAction) => galleryReducer(s, a, total),
-    {
-      current: 0,
-      playing: total > 1,
-      lightboxOpen: false,
-      lightboxIndex: 0,
-    }
+    { current: 0, playing: total > 1, lightboxOpen: false, lightboxIndex: 0 }
   );
-
   const dispatch = rawDispatch;
 
-  // Ref for the section — used for IntersectionObserver to pause when off-screen
   const sectionRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Touch gesture tracking
   const touchStartX = useRef<number | null>(null);
 
-  // Reduced-motion preference
   const prefersReducedMotion =
     typeof window !== "undefined"
       ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
       : false;
 
-  // Autoplay
   const startAutoplay = useCallback(() => {
     if (total <= 1 || prefersReducedMotion) return;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      dispatch({ type: "NEXT" });
-    }, AUTOPLAY_INTERVAL);
-  }, [total, prefersReducedMotion, dispatch]);
+    timerRef.current = setInterval(() => dispatch({ type: "NEXT" }), AUTOPLAY_INTERVAL);
+  }, [total, prefersReducedMotion]);
 
   const stopAutoplay = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   }, []);
 
   useEffect(() => {
-    if (state.playing && !state.lightboxOpen) {
-      startAutoplay();
-    } else {
-      stopAutoplay();
-    }
+    if (state.playing && !state.lightboxOpen) startAutoplay();
+    else stopAutoplay();
     return stopAutoplay;
   }, [state.playing, state.lightboxOpen, startAutoplay, stopAutoplay]);
 
-  // Pause when scrolled out of view
   useEffect(() => {
     if (total <= 1) return;
     const el = sectionRef.current;
     if (!el) return;
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) dispatch({ type: "PAUSE" });
-      },
+      ([entry]) => { if (!entry.isIntersecting) dispatch({ type: "PAUSE" }); },
       { threshold: 0 }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [total, dispatch]);
+  }, [total]);
 
-  // Touch handlers
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
   }
-
   function handleTouchEnd(e: React.TouchEvent) {
     if (touchStartX.current === null) return;
     const delta = e.changedTouches[0].clientX - touchStartX.current;
     touchStartX.current = null;
     if (Math.abs(delta) < 40) return;
-    if (delta < 0) {
-      dispatch({ type: "NEXT" });
-      dispatch({ type: "PAUSE" });
-    } else {
-      dispatch({ type: "PREV" });
-    }
+    dispatch({ type: delta < 0 ? "NEXT" : "PREV" });
+    if (delta > 0) dispatch({ type: "PAUSE" });
   }
 
   if (total === 0) return null;
-
   const current = images[state.current];
   if (!current?.asset?._ref) return null;
 
-  // Pass the asset reference object — @sanity/image-url needs _ref to build the CDN URL
-  const primaryUrl = urlFor(current.asset)
-    .width(900)
-    .height(600)
-    .fit("crop")
+  const src = urlFor(current.asset)
+    .width(1200)
+    .fit("max")
     .auto("format")
     .quality(85)
     .url();
 
-  // lqip is now at the image level, not nested inside asset
   const lqip = current.lqip ?? undefined;
 
   return (
     <>
+      {/*
+        Outer wrapper
+        ─────────────
+        Desktop: h-full + flex-col so the wrapper stretches to the text-column
+                 height (grid is items-stretch). The image frame gets flex-1
+                 and is position:relative — giving Next/Image fill a real height.
+        Mobile:  no h-full; the aspect-ratio frame below defines the height.
+      */}
       <div
         ref={sectionRef}
-        className="relative w-full h-full select-none flex flex-col"
+        className={[
+          "select-none w-full",
+          layout === "desktop" ? "h-full flex flex-col" : "flex flex-col",
+        ].join(" ")}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         aria-label={`Image gallery — ${total} image${total !== 1 ? "s" : ""}`}
       >
-        {/* Primary image — min-height locks in a floor; actual height grows to fill the column */}
-        <div className="relative w-full overflow-hidden bg-sand flex-1" style={{ minHeight: "240px" }}>
+
+        {/* ── Image frame ───────────────────────────────────────────────
+            Desktop: flex-1 + position:relative → fills remaining column
+                     height after the controls bar.
+                     Next/Image fill + object-contain → whole image visible,
+                     scaled to fit both width AND height, sand fills gaps.
+            Mobile:  fixed aspect-[4/3] frame → predictable height on small
+                     screens. Same fill + object-contain treatment inside.
+        ──────────────────────────────────────────────────────────────── */}
+        <div
+          className={[
+            "relative overflow-hidden bg-sand",
+            layout === "desktop"
+              ? "flex-1 min-h-[200px]"
+              : "w-full aspect-[4/3]",
+          ].join(" ")}
+        >
           <Image
             key={`${eventId}-${state.current}`}
-            src={primaryUrl}
+            src={src}
             alt={current.alt || "Event photograph"}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
+            /*
+              object-contain: the image scales down proportionally to fit
+              inside the frame from both directions. It will never be cropped.
+              Sand background shows through any letterbox areas.
+            */
+            className="object-contain"
             placeholder={lqip ? "blur" : "empty"}
             blurDataURL={lqip}
             loading="lazy"
           />
 
-          {/* Top-right controls overlay */}
+          {/* Counter + lightbox */}
           <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
-            {/* Counter */}
             {total > 1 && (
               <span className="bg-charcoal/70 text-warm-white font-sans text-[10px] px-2 py-1 backdrop-blur-sm">
                 {state.current + 1} / {total}
               </span>
             )}
-
-            {/* Lightbox expand */}
             <button
-              onClick={() =>
-                dispatch({ type: "OPEN_LIGHTBOX", index: state.current })
-              }
+              onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index: state.current })}
               aria-label="Open image in full screen"
               className="w-8 h-8 flex items-center justify-center bg-charcoal/70 text-warm-white hover:bg-charcoal/90 transition-colors backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-white/50"
             >
@@ -222,20 +213,19 @@ export default function EducationGallery({ images, eventId }: Props) {
             </button>
           </div>
 
-          {/* Caption overlay at bottom */}
+          {/* Caption */}
           {current.caption && (
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-charcoal/60 to-transparent pt-6 pb-3 px-3">
-              <p className="font-sans text-[11px] text-warm-white/90">
-                {current.caption}
-              </p>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-charcoal/60 to-transparent pt-6 pb-3 px-3 z-10">
+              <p className="font-sans text-[11px] text-warm-white/90">{current.caption}</p>
             </div>
           )}
         </div>
 
-        {/* Controls bar */}
+        {/* ── Controls bar ─────────────────────────────────────────────
+            flex-shrink-0 so it never collapses when the frame is flex-1
+        ──────────────────────────────────────────────────────────────── */}
         {total > 1 && (
-          <div className="flex items-center justify-between mt-0 bg-sand/60 border-t border-sand-dark/40 px-3 py-2">
-            {/* Prev / play / next */}
+          <div className="flex-shrink-0 flex items-center justify-between bg-sand/60 border-t border-sand-dark/40 px-3 py-2">
             <div className="flex items-center gap-1">
               <button
                 onClick={() => dispatch({ type: "PREV" })}
@@ -264,7 +254,6 @@ export default function EducationGallery({ images, eventId }: Props) {
               </button>
             </div>
 
-            {/* Dot navigation */}
             {total <= 8 && (
               <div className="flex items-center gap-1.5" role="tablist">
                 {images.map((_, i) => (
@@ -287,7 +276,6 @@ export default function EducationGallery({ images, eventId }: Props) {
         )}
       </div>
 
-      {/* Lightbox — rendered in a portal to escape layout constraints */}
       {state.lightboxOpen &&
         typeof document !== "undefined" &&
         createPortal(
@@ -296,16 +284,10 @@ export default function EducationGallery({ images, eventId }: Props) {
             currentIndex={state.lightboxIndex}
             onClose={() => dispatch({ type: "CLOSE_LIGHTBOX" })}
             onPrev={() =>
-              dispatch({
-                type: "OPEN_LIGHTBOX",
-                index: (state.lightboxIndex - 1 + total) % total,
-              })
+              dispatch({ type: "OPEN_LIGHTBOX", index: (state.lightboxIndex - 1 + total) % total })
             }
             onNext={() =>
-              dispatch({
-                type: "OPEN_LIGHTBOX",
-                index: (state.lightboxIndex + 1) % total,
-              })
+              dispatch({ type: "OPEN_LIGHTBOX", index: (state.lightboxIndex + 1) % total })
             }
           />,
           document.body

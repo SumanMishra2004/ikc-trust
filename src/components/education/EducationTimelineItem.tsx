@@ -52,6 +52,11 @@ export default function EducationTimelineItem({ event, globalIndex }: Props) {
       data-event-index={globalIndex}
     >
       {/* ── Desktop layout (lg+) ─────────────────────────────────────── */}
+      {/*
+        items-stretch — both columns grow to whichever is taller (the text).
+        The gallery column is h-full so it inherits that height and the image
+        scales to fit inside it without cropping.
+      */}
       <div className="hidden lg:grid lg:grid-cols-[1fr_48px_1fr] items-stretch gap-0">
 
         {/* Left column */}
@@ -62,24 +67,23 @@ export default function EducationTimelineItem({ event, globalIndex }: Props) {
           className="pb-16 flex flex-col"
         >
           {imageLeft ? (
-            /* Image on left */
             hasImages ? (
-              <div className="pr-8 h-full flex flex-col">
+              /* h-full so gallery fills the column height driven by the text side */
+              <div className="pr-8 h-full">
                 <EducationGallery
                   images={event.images!}
                   eventId={event._id}
+                  layout="desktop"
                 />
               </div>
             ) : (
-              /* No-image placeholder to maintain layout balance */
-              <div className="pr-8 aspect-[3/2] bg-sand/40 border border-sand-dark/30 flex items-center justify-center">
+              <div className="pr-8 h-full bg-sand border border-sand-dark flex items-center justify-center min-h-[180px]">
                 <span className="font-sans text-[11px] uppercase tracking-[0.18em] text-charcoal-muted/40">
                   No photographs
                 </span>
               </div>
             )
           ) : (
-            /* Description on left */
             <div className="pr-8 pt-2">
               <EducationEventHeader event={event} />
               <EducationEventMetadata event={event} />
@@ -90,9 +94,7 @@ export default function EducationTimelineItem({ event, globalIndex }: Props) {
 
         {/* Centre column — timeline line + marker */}
         <div className="relative flex flex-col items-center">
-          {/* Vertical line — full height */}
           <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-sand-dark/50" />
-          {/* Marker dot */}
           <motion.div
             variants={fadeIn}
             initial="hidden"
@@ -109,23 +111,22 @@ export default function EducationTimelineItem({ event, globalIndex }: Props) {
           className="pb-16 flex flex-col"
         >
           {imageLeft ? (
-            /* Description on right */
             <div className="pl-8 pt-2">
               <EducationEventHeader event={event} />
               <EducationEventMetadata event={event} />
               <EducationDescription markdown={event.description} />
             </div>
           ) : (
-            /* Image on right */
             hasImages ? (
-              <div className="pl-8 h-full flex flex-col">
+              <div className="pl-8 h-full">
                 <EducationGallery
                   images={event.images!}
                   eventId={event._id}
+                  layout="desktop"
                 />
               </div>
             ) : (
-              <div className="pl-8 aspect-[3/2] bg-sand/40 border border-sand-dark/30 flex items-center justify-center">
+              <div className="pl-8 h-full bg-sand border border-sand-dark flex items-center justify-center min-h-[180px]">
                 <span className="font-sans text-[11px] uppercase tracking-[0.18em] text-charcoal-muted/40">
                   No photographs
                 </span>
