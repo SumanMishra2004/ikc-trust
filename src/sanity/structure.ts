@@ -7,8 +7,6 @@ import { type StructureResolver } from "sanity/structure";
  * document types are added. To add a new initiative:
  *   1. Create its schema in src/sanity/schemaTypes/ and register it in index.ts.
  *   2. Add a new S.listItem() inside the matching group (or create a new group).
- *
- * Icon reference: https://icons.sanity.io  (Sanity uses Heroicons v2 internally)
  */
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -40,45 +38,131 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // ── Placeholder groups — uncomment and add schemas as initiatives grow ──
+      // ── Healthcare ───────────────────────────────────────────────────────
+      S.listItem()
+        .id("healthcare")
+        .title("Healthcare")
+        .icon(() => "🏥")
+        .child(
+          S.list()
+            .title("Healthcare")
+            .items([
+              S.listItem()
+                .id("healthcareEvents")
+                .title("Events")
+                .icon(() => "💊")
+                .child(
+                  S.documentTypeList("healthcareEvent")
+                    .title("Healthcare Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
 
-      // S.listItem()
-      //   .id("healthcare")
-      //   .title("Healthcare")
-      //   .icon(() => "🏥")
-      //   .child(
-      //     S.documentTypeList("healthcareEvent").title("Healthcare Events")
-      //   ),
+      S.divider(),
 
-      // S.listItem()
-      //   .id("environment")
-      //   .title("Environment")
-      //   .icon(() => "🌱")
-      //   .child(
-      //     S.documentTypeList("environmentEvent").title("Environment Events")
-      //   ),
+      // ── Environment ──────────────────────────────────────────────────────
+      S.listItem()
+        .id("environment")
+        .title("Environment")
+        .icon(() => "🌱")
+        .child(
+          S.list()
+            .title("Environment")
+            .items([
+              S.listItem()
+                .id("environmentEvents")
+                .title("Events")
+                .icon(() => "🌿")
+                .child(
+                  S.documentTypeList("environmentEvent")
+                    .title("Environment Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
 
-      // S.listItem()
-      //   .id("socialWelfare")
-      //   .title("Social Welfare")
-      //   .icon(() => "🤝")
-      //   .child(
-      //     S.documentTypeList("socialWelfareEvent").title("Social Welfare Events")
-      //   ),
+      S.divider(),
 
-      // S.listItem()
-      //   .id("disasterRelief")
-      //   .title("Disaster Relief")
-      //   .icon(() => "🆘")
-      //   .child(
-      //     S.documentTypeList("disasterReliefEvent").title("Disaster Relief Events")
-      //   ),
+      // ── Social Welfare ───────────────────────────────────────────────────
+      S.listItem()
+        .id("socialWelfare")
+        .title("Social Welfare")
+        .icon(() => "🤝")
+        .child(
+          S.list()
+            .title("Social Welfare")
+            .items([
+              S.listItem()
+                .id("socialWelfareEvents")
+                .title("Events")
+                .icon(() => "🫶")
+                .child(
+                  S.documentTypeList("socialWelfareEvent")
+                    .title("Social Welfare Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
 
-      // S.listItem()
-      //   .id("cultureSports")
-      //   .title("Culture & Sports")
-      //   .icon(() => "🎭")
-      //   .child(
-      //     S.documentTypeList("cultureSportsEvent").title("Culture & Sports Events")
-      //   ),
+      S.divider(),
+
+      // ── Disaster Relief ──────────────────────────────────────────────────
+      S.listItem()
+        .id("disasterRelief")
+        .title("Disaster Relief")
+        .icon(() => "🆘")
+        .child(
+          S.list()
+            .title("Disaster Relief")
+            .items([
+              S.listItem()
+                .id("disasterReliefEvents")
+                .title("Events")
+                .icon(() => "⛑️")
+                .child(
+                  S.documentTypeList("disasterReliefEvent")
+                    .title("Disaster Relief Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
+
+      S.divider(),
+
+      // ── Culture & Sports ─────────────────────────────────────────────────
+      S.listItem()
+        .id("cultureSports")
+        .title("Culture & Sports")
+        .icon(() => "🎭")
+        .child(
+          S.list()
+            .title("Culture & Sports")
+            .items([
+              S.listItem()
+                .id("cultureSportsEvents")
+                .title("Events")
+                .icon(() => "🏆")
+                .child(
+                  S.documentTypeList("cultureSportsEvent")
+                    .title("Culture & Sports Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
     ]);

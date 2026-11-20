@@ -1,0 +1,81 @@
+"use client";
+
+import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import type { Components } from "react-markdown";
+
+interface Props {
+  markdown: string;
+  collapseAfterWords?: number;
+}
+
+const components: Components = {
+  h1: ({ children }) => (
+    <h1 className="font-serif text-xl text-forest font-normal mt-6 mb-2 leading-snug">{children}</h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className="font-serif text-lg text-forest font-normal mt-5 mb-2 leading-snug">{children}</h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="font-sans text-[13px] uppercase tracking-[0.12em] text-forest font-semibold mt-4 mb-1.5">{children}</h3>
+  ),
+  p: ({ children }) => (
+    <p className="font-sans text-[14px] text-charcoal leading-[1.75] mb-3">{children}</p>
+  ),
+  strong: ({ children }) => <strong className="font-semibold text-charcoal">{children}</strong>,
+  em: ({ children }) => <em className="italic text-charcoal/80">{children}</em>,
+  ul: ({ children }) => <ul className="mb-3 space-y-1 pl-4">{children}</ul>,
+  ol: ({ children }) => <ol className="mb-3 space-y-1 pl-4 list-decimal">{children}</ol>,
+  li: ({ children }) => (
+    <li className="font-sans text-[14px] text-charcoal leading-[1.7] flex gap-2 items-start before:content-['–'] before:text-terracotta/60 before:flex-shrink-0 before:mt-[1px]">
+      <span>{children}</span>
+    </li>
+  ),
+  blockquote: ({ children }) => (
+    <blockquote className="border-l-2 border-forest/30 pl-4 my-4 font-serif text-[15px] italic text-charcoal/70 leading-relaxed">{children}</blockquote>
+  ),
+  a: ({ href, children }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-forest underline underline-offset-2 decoration-forest/40 hover:decoration-forest transition-all">{children}</a>
+  ),
+  table: ({ children }) => (
+    <div className="overflow-x-auto my-4"><table className="w-full border-collapse text-[13px] font-sans">{children}</table></div>
+  ),
+  thead: ({ children }) => <thead className="bg-sand border-b border-sand-dark">{children}</thead>,
+  tr: ({ children }) => <tr className="border-b border-sand-dark/50">{children}</tr>,
+  th: ({ children }) => <th className="px-3 py-2 text-left text-[11px] uppercase tracking-[0.1em] text-charcoal font-semibold">{children}</th>,
+  td: ({ children }) => <td className="px-3 py-2 text-charcoal-muted">{children}</td>,
+  hr: () => <hr className="my-4 border-sand-dark/60" />,
+  code: ({ children }) => <code className="bg-sand px-1.5 py-0.5 font-mono text-[12px] text-charcoal">{children}</code>,
+  pre: ({ children }) => <pre className="bg-sand p-4 overflow-x-auto font-mono text-[12px] text-charcoal my-4">{children}</pre>,
+};
+
+function truncateAtWords(text: string, wordLimit: number): string {
+  const words = text.split(/\s+/);
+  if (words.length <= wordLimit) return text;
+  return words.slice(0, wordLimit).join(" ") + "…";
+}
+
+export default function HealthcareDescription({ markdown, collapseAfterWords = 300 }: Props) {
+  const wordCount = markdown.trim().split(/\s+/).length;
+  const isLong = wordCount > collapseAfterWords;
+  const [expanded, setExpanded] = useState(false);
+  const displayText = isLong && !expanded ? truncateAtWords(markdown, collapseAfterWords) : markdown;
+
+  return (
+    <div>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+        {displayText}
+      </ReactMarkdown>
+      {isLong && (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-2 inline-flex items-center gap-1.5 font-sans text-[11px] uppercase tracking-[0.18em] text-forest font-semibold hover:text-terracotta transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/50"
+          aria-expanded={expanded}
+        >
+          {expanded ? "Read less ↑" : "Read more ↓"}
+        </button>
+      )}
+    </div>
+  );
+}
