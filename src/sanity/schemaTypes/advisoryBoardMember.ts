@@ -43,10 +43,10 @@ export const advisoryBoardMember = defineType({
       name: "description",
       title: "Profile Description",
       type: "text",
-      rows: 6,
+      rows: 8,
       description:
-        "2–4 sentences about this person's background and their contribution to IKC Trust.",
-      validation: (Rule) => Rule.required().min(50).max(600),
+        "Markdown supported — bold (**text**), italic (*text*), bullet lists (- item), links ([label](url)). 50–700 characters.",
+      validation: (Rule) => Rule.required().min(50).max(700),
     }),
 
     defineField({

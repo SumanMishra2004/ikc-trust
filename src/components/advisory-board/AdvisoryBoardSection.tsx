@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ChevronDown } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { urlFor } from "@/sanity/image";
 import type { AdvisoryBoardMember } from "@/types/people";
 
@@ -113,9 +115,40 @@ function AdvisoryCard({
             className="overflow-hidden"
           >
             <div className="px-6 sm:px-8 py-6 bg-sand/30 border-t border-sand-dark/60">
-              <p className="font-sans text-body-md text-charcoal-muted leading-relaxed">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  p: ({ children }) => (
+                    <p className="font-sans text-body-md text-charcoal-muted leading-relaxed mb-3 last:mb-0">
+                      {children}
+                    </p>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className="font-semibold text-charcoal">{children}</strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className="italic text-charcoal-light">{children}</em>
+                  ),
+                  a: ({ href, children }) => (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-forest underline underline-offset-2 hover:text-terracotta transition-colors"
+                    >
+                      {children}
+                    </a>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="list-disc list-inside space-y-1 font-sans text-body-sm text-charcoal-muted mb-3">
+                      {children}
+                    </ul>
+                  ),
+                  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                }}
+              >
                 {member.description}
-              </p>
+              </ReactMarkdown>
             </div>
           </motion.div>
         )}
@@ -175,9 +208,40 @@ function FeaturedAdvisoryCard({ member }: { member: AdvisoryBoardMember }) {
           </h3>
           <p className="font-sans text-body-sm text-sand/80 mb-6">{member.affiliation}</p>
           <div className="w-12 h-[2px] bg-terracotta/60 mb-6" />
-          <p className="font-sans text-body-md text-sand/90 leading-relaxed max-w-xl">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              p: ({ children }) => (
+                <p className="font-sans text-body-md text-sand/90 leading-relaxed mb-3 last:mb-0 max-w-xl">
+                  {children}
+                </p>
+              ),
+              strong: ({ children }) => (
+                <strong className="font-semibold text-warm-white">{children}</strong>
+              ),
+              em: ({ children }) => (
+                <em className="italic text-sand/80">{children}</em>
+              ),
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-terracotta underline underline-offset-2 hover:text-terracotta-dark transition-colors"
+                >
+                  {children}
+                </a>
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc list-inside space-y-1 font-sans text-body-sm text-sand/80 mb-3">
+                  {children}
+                </ul>
+              ),
+              li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+            }}
+          >
             {member.description}
-          </p>
+          </ReactMarkdown>
         </div>
         <div className="mt-8 pt-6 border-t border-warm-white/10">
           <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-sand/60">
