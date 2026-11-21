@@ -45,8 +45,8 @@ export const advisoryBoardMember = defineType({
       type: "text",
       rows: 8,
       description:
-        "Markdown supported — bold (**text**), italic (*text*), bullet lists (- item), links ([label](url)). 50–700 characters.",
-      validation: (Rule) => Rule.required().min(50).max(700),
+        "Markdown supported — bold (**text**), italic (*text*), bullet lists (- item), links ([label](url)). 50–1200 characters.",
+      validation: (Rule) => Rule.required().min(50).max(1200),
     }),
 
     defineField({
