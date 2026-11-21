@@ -3,6 +3,8 @@
  * Mirrors the Sanity `healthcareEvent` document schema.
  */
 
+import type { InitiativeVideo, MediaCoverageItem } from "./media";
+
 export type EventMode = "Offline" | "Online" | "Hybrid";
 
 export type HealthcareEventType =
@@ -42,6 +44,8 @@ export interface HealthcareEvent {
   mode?: EventMode;
   description: string; // Markdown source text
   images?: InitiativeEventImage[];
+  videos?: InitiativeVideo[];
+  mediaCoverage?: MediaCoverageItem[];
 }
 
 export interface PaginationCursor {

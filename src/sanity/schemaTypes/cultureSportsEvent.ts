@@ -116,6 +116,24 @@ export const cultureSportsEvent = defineType({
         layout: "grid",
       },
     }),
+
+    defineField({
+      name: "videos",
+      title: "Event Videos",
+      type: "array",
+      description:
+        "Upload video clips from the event (MP4/WebM/MOV). Videos appear first in the media slider with autoplay. Drag to reorder.",
+      of: [{ type: "initiativeVideo" }],
+    }),
+
+    defineField({
+      name: "mediaCoverage",
+      title: "Media Coverage",
+      type: "array",
+      description:
+        "Press coverage, photo coverage, or YouTube videos about this event. Each entry can be an image (newspaper/magazine clipping, screenshot) or a YouTube link.",
+      of: [{ type: "mediaCoverageItem" }],
+    }),
   ],
 
   preview: {

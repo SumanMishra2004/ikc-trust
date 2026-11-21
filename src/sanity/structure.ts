@@ -165,4 +165,37 @@ export const structure: StructureResolver = (S) =>
                 ),
             ])
         ),
+
+      S.divider(),
+
+      // ── Team & Advisory Board ────────────────────────────────────────────
+      S.listItem()
+        .id("people")
+        .title("People")
+        .icon(() => "👥")
+        .child(
+          S.list()
+            .title("People")
+            .items([
+              S.listItem()
+                .id("teamMembers")
+                .title("Team Members")
+                .icon(() => "👤")
+                .child(
+                  S.documentTypeList("teamMember")
+                    .title("Team Members")
+                    .defaultOrdering([{ field: "order", direction: "asc" }])
+                ),
+
+              S.listItem()
+                .id("advisoryBoardMembers")
+                .title("Advisory Board")
+                .icon(() => "🎓")
+                .child(
+                  S.documentTypeList("advisoryBoardMember")
+                    .title("Advisory Board Members")
+                    .defaultOrdering([{ field: "order", direction: "asc" }])
+                ),
+            ])
+        ),
     ]);

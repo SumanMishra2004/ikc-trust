@@ -28,6 +28,26 @@ const EVENT_PROJECTION = /* groq */ `{
     "asset": asset.asset,
     "lqip": asset.asset->metadata.lqip,
     "dimensions": asset.asset->metadata.dimensions
+  },
+  videos[] {
+    _key,
+    title,
+    caption,
+    "url": asset.asset->url,
+    "posterUrl": poster.asset->url,
+    "posterLqip": poster.asset->metadata.lqip
+  },
+  mediaCoverage[] {
+    _key,
+    type,
+    title,
+    description,
+    "imageUrl": image.asset->url,
+    imageAlt,
+    "imageLqip": image.asset->metadata.lqip,
+    youtubeUrl,
+    source,
+    coverageDate
   }
 }`;
 

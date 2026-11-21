@@ -19,6 +19,8 @@ export const siteConfig = {
 
 export const navLinks = [
   { label: "About Us", href: "/about" },
+  { label: "Our Team", href: "/team" },
+  { label: "Advisory Board", href: "/advisory-board" },
   { label: "Our Impact", href: "#impact-metrics" },
   { label: "Partnerships", href: "#partnerships" },
   { label: "Contact", href: "#contact" },

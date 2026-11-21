@@ -3,6 +3,8 @@
  * Mirrors the Sanity `disasterReliefEvent` document schema.
  */
 
+import type { InitiativeVideo, MediaCoverageItem } from "./media";
+
 export type EventMode = "Offline" | "Online" | "Hybrid";
 
 export type DisasterReliefEventType =
@@ -42,6 +44,8 @@ export interface DisasterReliefEvent {
   mode?: EventMode;
   description: string;
   images?: InitiativeEventImage[];
+  videos?: InitiativeVideo[];
+  mediaCoverage?: MediaCoverageItem[];
 }
 
 export interface PaginationCursor {

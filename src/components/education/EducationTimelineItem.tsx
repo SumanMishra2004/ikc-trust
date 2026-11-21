@@ -1,168 +1,107 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
+import { motion, useInView } from "motion/react";
 import type { EducationEvent } from "@/types/education";
-import EducationGallery from "./EducationGallery";
 import EducationEventHeader from "./EducationEventHeader";
 import EducationEventMetadata from "./EducationEventMetadata";
 import EducationDescription from "./EducationDescription";
+import InitiativeMediaSlider from "@/components/shared/InitiativeMediaSlider";
+import MediaCoverageSection from "@/components/shared/MediaCoverageSection";
 
 interface Props {
   event: EducationEvent;
-  /**
-   * Global position index across all loaded events (0-based).
-   * Even = image left / description right.
-   * Odd  = description left / image right.
-   */
   globalIndex: number;
 }
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
 };
-
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.5, ease: "easeOut", delay: 0.1 },
-  },
+  visible: { opacity: 1, transition: { duration: 0.5, ease: "easeOut", delay: 0.1 } },
 };
 
 export default function EducationTimelineItem({ event, globalIndex }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const hasImages = Boolean(event.images && event.images.length > 0);
-  // Even index → image left; odd → image right
-  const imageLeft = globalIndex % 2 === 0;
+  const hasMedia = Boolean(
+    (event.videos && event.videos.length > 0) ||
+    (event.images && event.images.length > 0)
+  );
+  const hasMediaCoverage = Boolean(event.mediaCoverage && event.mediaCoverage.length > 0);
+  const mediaLeft = globalIndex % 2 === 0;
+
+  const MediaSlider = (layout: "desktop" | "mobile") =>
+    hasMedia ? (
+      <InitiativeMediaSlider
+        videos={event.videos}
+        images={event.images}
+        eventId={layout === "desktop" ? event._id : `mobile-${event._id}`}
+        layout={layout}
+      />
+    ) : (
+      <div className="w-full h-full bg-sand border border-sand-dark flex items-center justify-center min-h-[180px]">
+        <span className="font-sans text-[11px] uppercase tracking-[0.18em] text-charcoal-muted/40">
+          No media
+        </span>
+      </div>
+    );
+
+  const TextContent = (
+    <>
+      <EducationEventHeader event={event} />
+      <EducationEventMetadata event={event} />
+      <EducationDescription markdown={event.description} />
+      {hasMediaCoverage && <MediaCoverageSection items={event.mediaCoverage!} />}
+    </>
+  );
 
   return (
-    <div
-      ref={ref}
-      className="relative"
-      id={`event-${event._id}`}
-      data-event-index={globalIndex}
-    >
-      {/* ── Desktop layout (lg+) ─────────────────────────────────────── */}
-      {/*
-        items-stretch — both columns grow to whichever is taller (the text).
-        The gallery column is h-full so it inherits that height and the image
-        scales to fit inside it without cropping.
-      */}
+    <div ref={ref} className="relative" id={`event-${event._id}`} data-event-index={globalIndex}>
+
+      {/* ── Desktop ── */}
       <div className="hidden lg:grid lg:grid-cols-[1fr_48px_1fr] items-stretch gap-0">
 
-        {/* Left column */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="pb-16 flex flex-col"
-        >
-          {imageLeft ? (
-            hasImages ? (
-              /* h-full so gallery fills the column height driven by the text side */
-              <div className="pr-8 h-full">
-                <EducationGallery
-                  images={event.images!}
-                  eventId={event._id}
-                  layout="desktop"
-                />
-              </div>
-            ) : (
-              <div className="pr-8 h-full bg-sand border border-sand-dark flex items-center justify-center min-h-[180px]">
-                <span className="font-sans text-[11px] uppercase tracking-[0.18em] text-charcoal-muted/40">
-                  No photographs
-                </span>
-              </div>
-            )
+        <motion.div variants={fadeUp} initial="hidden" animate={inView ? "visible" : "hidden"} className="pb-16 flex flex-col">
+          {mediaLeft ? (
+            <div className="pr-8 h-full">{MediaSlider("desktop")}</div>
           ) : (
-            <div className="pr-8 pt-2">
-              <EducationEventHeader event={event} />
-              <EducationEventMetadata event={event} />
-              <EducationDescription markdown={event.description} />
-            </div>
+            <div className="pr-8 pt-2">{TextContent}</div>
           )}
         </motion.div>
 
-        {/* Centre column — timeline line + marker */}
         <div className="relative flex flex-col items-center">
           <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-sand-dark/50" />
-          <motion.div
-            variants={fadeIn}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="relative z-10 mt-6 w-3 h-3 rounded-full bg-forest border-2 border-ivory shadow-sm"
-          />
+          <motion.div variants={fadeIn} initial="hidden" animate={inView ? "visible" : "hidden"}
+            className="relative z-10 mt-6 w-3 h-3 rounded-full bg-forest border-2 border-ivory shadow-sm" />
         </div>
 
-        {/* Right column */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="pb-16 flex flex-col"
-        >
-          {imageLeft ? (
-            <div className="pl-8 pt-2">
-              <EducationEventHeader event={event} />
-              <EducationEventMetadata event={event} />
-              <EducationDescription markdown={event.description} />
-            </div>
+        <motion.div variants={fadeUp} initial="hidden" animate={inView ? "visible" : "hidden"} className="pb-16 flex flex-col">
+          {mediaLeft ? (
+            <div className="pl-8 pt-2">{TextContent}</div>
           ) : (
-            hasImages ? (
-              <div className="pl-8 h-full">
-                <EducationGallery
-                  images={event.images!}
-                  eventId={event._id}
-                  layout="desktop"
-                />
-              </div>
-            ) : (
-              <div className="pl-8 h-full bg-sand border border-sand-dark flex items-center justify-center min-h-[180px]">
-                <span className="font-sans text-[11px] uppercase tracking-[0.18em] text-charcoal-muted/40">
-                  No photographs
-                </span>
-              </div>
-            )
+            <div className="pl-8 h-full">{MediaSlider("desktop")}</div>
           )}
         </motion.div>
       </div>
 
-      {/* ── Mobile / tablet layout (< lg) ───────────────────────────── */}
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        className="lg:hidden relative pl-7 pb-12"
-      >
-        {/* Left-side timeline line */}
+      {/* ── Mobile ── */}
+      <motion.div variants={fadeUp} initial="hidden" animate={inView ? "visible" : "hidden"}
+        className="lg:hidden relative pl-7 pb-12">
         <div className="absolute left-0 top-0 bottom-0 w-px bg-sand-dark/50" />
-        {/* Marker dot */}
         <div className="absolute left-[-5px] top-5 w-3 h-3 rounded-full bg-forest border-2 border-ivory" />
-
-        {/* Content */}
         <div className="pt-2 space-y-4">
           <EducationEventHeader event={event} />
           <EducationEventMetadata event={event} />
-
-          {hasImages && (
-            <EducationGallery
-              images={event.images!}
-              eventId={`mobile-${event._id}`}
-            />
-          )}
-
+          {hasMedia && MediaSlider("mobile")}
           <EducationDescription markdown={event.description} />
+          {hasMediaCoverage && <MediaCoverageSection items={event.mediaCoverage!} />}
         </div>
       </motion.div>
+
     </div>
   );
 }

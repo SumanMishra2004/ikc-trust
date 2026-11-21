@@ -3,6 +3,8 @@
  * Mirrors the Sanity `educationEvent` document schema.
  */
 
+import type { InitiativeVideo, MediaCoverageItem } from "./media";
+
 export type EventMode = "Offline" | "Online" | "Hybrid";
 
 export type EventType =
@@ -45,6 +47,8 @@ export interface EducationEvent {
   mode?: EventMode;
   description: string; // Markdown source text
   images?: EducationEventImage[];
+  videos?: InitiativeVideo[];
+  mediaCoverage?: MediaCoverageItem[];
 }
 
 /**
