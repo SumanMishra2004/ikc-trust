@@ -168,6 +168,91 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
+      // ── Conference ───────────────────────────────────────────────────────
+      S.listItem()
+        .id("conference")
+        .title("Conference")
+        .icon(() => "🎤")
+        .child(
+          S.list()
+            .title("Conference")
+            .items([
+              S.listItem()
+                .id("conferenceEvents")
+                .title("Events")
+                .icon(() => "📋")
+                .child(
+                  S.documentTypeList("conferenceEvent")
+                    .title("Conference Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
+
+      S.divider(),
+
+      // ── Partnerships ─────────────────────────────────────────────────────
+      S.listItem()
+        .id("partnerships")
+        .title("Partnerships")
+        .icon(() => "🤝")
+        .child(
+          S.list()
+            .title("Partnerships")
+            .items([
+              S.listItem()
+                .id("partnershipEvents")
+                .title("Partnership Events")
+                .icon(() => "📋")
+                .child(
+                  S.documentTypeList("partnershipEvent")
+                    .title("Partnership Events")
+                    .defaultOrdering([
+                      { field: "date", direction: "desc" },
+                      { field: "_id", direction: "desc" },
+                    ])
+                ),
+            ])
+        ),
+
+      S.divider(),
+
+      // ── Collaborators ─────────────────────────────────────────────────────
+      S.listItem()
+        .id("collaborators")
+        .title("Collaborators")
+        .icon(() => "🤝")
+        .child(
+          S.documentTypeList("collaborator")
+            .title("Collaborators")
+            .defaultOrdering([
+              { field: "date", direction: "desc" },
+              { field: "_id", direction: "desc" },
+            ])
+        ),
+
+      S.divider(),
+
+      // ── Contributors ─────────────────────────────────────────────────────
+      S.listItem()
+        .id("contributors")
+        .title("Contributors")
+        .icon(() => "🙏")
+        .child(
+          S.documentTypeList("contributor")
+            .title("Contributors")
+            .defaultOrdering([
+              { field: "category", direction: "asc" },
+              { field: "order", direction: "asc" },
+              { field: "name", direction: "asc" },
+            ])
+        ),
+
+      S.divider(),
+
       // ── Team & Advisory Board ────────────────────────────────────────────
       S.listItem()
         .id("people")

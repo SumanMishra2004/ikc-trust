@@ -19,11 +19,45 @@ export const siteConfig = {
 
 export const navLinks = [
   { label: "About Us", href: "/about" },
+    { label: "Advisory Board", href: "/advisory-board" },
   { label: "Our Team", href: "/team" },
-  { label: "Advisory Board", href: "/advisory-board" },
-  { label: "Our Impact", href: "#impact-metrics" },
-  { label: "Partnerships", href: "#partnerships" },
-  { label: "Contact", href: "#contact" },
+
+
+  { label: "Contact", href: "/contact" },
+];
+
+export type NetworkNavItem = {
+  label: string;
+  description: string;
+  href: string;
+  iconBg: string;
+};
+
+export const networkNavItems: NetworkNavItem[] = [
+  {
+    label: "Partnerships",
+    description: "Corporate CSR, academic & medical alliances",
+    href: "/partnerships",
+    iconBg: "bg-[#244B3C]",
+  },
+  {
+    label: "Collaborators",
+    description: "Grassroots NGOs & panchayat networks",
+    href: "/collaborators",
+    iconBg: "bg-[#292B27]",
+  },
+  {
+    label: "Contributors",
+    description: "Donors & philanthropic supporters",
+    href: "/contributors",
+    iconBg: "bg-[#B9674B]",
+  },
+  {
+    label: "Awards & Recognition",
+    description: "Honours received for our field work",
+    href: "/awards-recognition",
+    iconBg: "bg-[#1B3A2D]",
+  },
 ];
 
 export type InitiativeNavItem = {
@@ -76,6 +110,13 @@ export const initiativeNavItems: InitiativeNavItem[] = [
     description: "Promoting Indian culture through arts, music, dance,...",
     href: "/initiatives/culture-sports",
     iconBg: "bg-pink-500",
+  },
+  {
+    number: "07",
+    label: "Conference",
+    description: "Academic and community conferences on knowledge and care.",
+    href: "/initiatives/conference",
+    iconBg: "bg-purple-500",
   },
 ];
 
