@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Menu, X, ChevronRight,
   GraduationCap, Leaf, Users, HeartPulse, ShieldAlert, Heart, Mic,
@@ -30,11 +31,29 @@ const initiativeIconMap: Record<string, React.ReactNode> = {
   "07": <Mic size={15} className="text-white" />,
 };
 
+// Explicit bg class map — keeps full class strings visible to Tailwind's scanner
+const initiativeIconBgMap: Record<string, string> = {
+  "01": "bg-sky-500",
+  "02": "bg-teal-500",
+  "03": "bg-green-500",
+  "04": "bg-orange-500",
+  "05": "bg-gray-500",
+  "06": "bg-pink-500",
+  "07": "bg-purple-500",
+};
+
 const networkIconMap: Record<string, React.ReactNode> = {
   "/partnerships":        <Building2 size={15} className="text-white" />,
   "/collaborators":       <Network size={15} className="text-white" />,
   "/contributors":        <HeartHandshake size={15} className="text-white" />,
   "/awards-recognition":  <Trophy size={15} className="text-white" />,
+};
+
+const networkIconBgMap: Record<string, string> = {
+  "/partnerships":        "bg-blue-600",
+  "/collaborators":       "bg-indigo-500",
+  "/contributors":        "bg-rose-500",
+  "/awards-recognition":  "bg-amber-500",
 };
 
 // Shared dropdown item
@@ -111,9 +130,16 @@ export default function Header() {
           <div className="px-4 md:px-6 h-14 flex items-center justify-between gap-4">
 
             {/* Brand */}
-            <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
-              <div className="w-8 h-8 rounded-full border border-[#1B3A2D]/40 flex items-center justify-center bg-[#1B3A2D]/10 text-[#1B3A2D] transition-transform group-hover:scale-105">
-                <span className="font-serif italic font-bold text-base leading-none">I</span>
+            <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
+              <div className="relative w-8 h-8 flex-shrink-0 bg-white/90 rounded-full p-1 transition-transform group-hover:scale-105">
+                <Image
+                  src="/logo.png"
+                  alt="IKC Trust"
+                  fill
+                  sizes="32px"
+                  className="object-contain p-0.5"
+                  priority
+                />
               </div>
             </Link>
 
@@ -152,7 +178,7 @@ export default function Header() {
                           <li key={item.href} className="bg-[#F8F5ED]">
                             <DropdownItem
                               href={item.href}
-                              iconBg={item.iconBg}
+                              iconBg={initiativeIconBgMap[item.number]}
                               icon={initiativeIconMap[item.number]}
                               label={item.label}
                               description={item.description}
@@ -188,7 +214,7 @@ export default function Header() {
                           <li key={item.href} className="bg-[#F8F5ED]">
                             <DropdownItem
                               href={item.href}
-                              iconBg={item.iconBg}
+                              iconBg={networkIconBgMap[item.href]}
                               icon={networkIconMap[item.href]}
                               label={item.label}
                               description={item.description}
@@ -217,7 +243,7 @@ export default function Header() {
 
             {/* CTA + hamburger */}
             <div className="flex items-center gap-3">
-              <Link href="#contact"
+              <Link href="/contact"
                 className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#1B3A2D] text-white font-sans text-[11px] uppercase tracking-[0.18em] font-semibold transition-all duration-300 hover:bg-[#244B3C] hover:shadow-md">
                 Get Involved <span>→</span>
               </Link>
@@ -265,7 +291,7 @@ export default function Header() {
                         {initiativeNavItems.map((item) => (
                           <Link key={item.href} href={item.href} onClick={closeAll}
                             className="flex items-center gap-3 px-2 py-2 hover:bg-[#1B3A2D]/5 transition-colors">
-                            <div className={cn("w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center", item.iconBg)}>
+                            <div className={cn("w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center", initiativeIconBgMap[item.number])}>
                               {initiativeIconMap[item.number]}
                             </div>
                             <span className="text-[11px] font-medium text-[#292B27] font-sans">{item.label}</span>
@@ -290,7 +316,7 @@ export default function Header() {
                         {networkNavItems.map((item) => (
                           <Link key={item.href} href={item.href} onClick={closeAll}
                             className="flex items-center gap-3 px-2 py-2 hover:bg-[#1B3A2D]/5 transition-colors">
-                            <div className={cn("w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center", item.iconBg)}>
+                            <div className={cn("w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center", networkIconBgMap[item.href])}>
                               {networkIconMap[item.href]}
                             </div>
                             <span className="text-[11px] font-medium text-[#292B27] font-sans">{item.label}</span>
@@ -301,7 +327,7 @@ export default function Header() {
                   </AnimatePresence>
                 </div>
 
-                <Link href="#contact" onClick={closeAll}
+                <Link href="/contact" onClick={closeAll}
                   className="mt-3 px-5 py-2.5 bg-[#1B3A2D] text-white font-sans text-xs uppercase tracking-[0.18em] font-semibold text-center hover:bg-[#244B3C] transition-colors">
                   Get Involved
                 </Link>

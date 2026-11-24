@@ -217,54 +217,7 @@ export default function JourneySection() {
             </motion.div>
           </div>
 
-          {/* Interlude: documentary image + ground-level prose */}
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={timelineInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-            className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center bg-warm-white border border-sand-dark/50 shadow-sm p-6 md:p-10"
-          >
-            <div className="lg:col-span-5 aspect-[4/3] overflow-hidden relative bg-sand">
-              <Image
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=85&auto=format&fit=crop"
-                alt="Girl students in a rural Bengal learning environment"
-                fill
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
-              <div className="absolute top-4 left-4 bg-charcoal/80 text-warm-white px-3 py-1 text-[10px] uppercase tracking-widest font-sans backdrop-blur-sm">
-                Field Documentation
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 flex flex-col">
-              <span className="text-[10px] font-sans uppercase tracking-[0.22em] text-terracotta font-semibold block mb-3">
-                Grounded Practice
-              </span>
-              <h3 className="font-serif text-headline-lg text-charcoal mb-4">
-                Built from the ground up — in the courtyards and community halls of Bengal
-              </h3>
-              <p className="font-sans text-body-md text-charcoal-muted leading-relaxed mb-6">
-                Our teams operate not from distant offices but directly on village school porches, community
-                health posts, and rural clinics. Each initiative is shaped in collaboration with local
-                educators, health aides, and panchayat representatives.
-              </p>
-              <div className="grid grid-cols-3 gap-4 border-t border-sand-dark/50 pt-6">
-                {[
-                  { val: "100%", label: "Statutory Filings Open" },
-                  { val: "12A/80G", label: "Tax Exemptions Active" },
-                  { val: "Kolkata", label: "Trust Headquarters" },
-                ].map((stat) => (
-                  <div key={stat.label} className="border-t-2 border-sand-dark/60 pt-3">
-                    <span className="font-serif text-headline-sm text-forest block">{stat.val}</span>
-                    <span className="font-sans text-[11px] text-charcoal-muted uppercase tracking-[0.1em]">
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+         
         </div>
       </div>
 
@@ -337,14 +290,14 @@ export default function JourneySection() {
               className="flex flex-col sm:flex-row items-center gap-4 mb-16"
             >
               <Link
-                href="#contact"
+                href="/contact"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-terracotta hover:bg-terracotta-dark text-warm-white px-8 py-4 font-sans text-xs uppercase tracking-[0.2em] font-semibold transition-colors shadow-md"
               >
                 Get Involved
                 <span>→</span>
               </Link>
               <Link
-                href="#"
+                href="/contact"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-warm-white/30 hover:border-warm-white/70 text-warm-white px-8 py-4 font-sans text-xs uppercase tracking-[0.2em] font-semibold transition-colors"
               >
                 Contact Us

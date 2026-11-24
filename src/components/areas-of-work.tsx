@@ -66,6 +66,7 @@ export default function AreasOfWork() {
                 animate={inView ? "visible" : "hidden"}
                 className="md:col-span-12 lg:col-span-7 bg-ivory border border-sand-dark flex flex-col justify-between overflow-hidden group"
               >
+                <Link href={item.href} className="flex flex-col flex-1">
                 {item.imageUrl && (
                   <div className="relative h-80 md:h-96 w-full overflow-hidden">
                     <Image
@@ -100,6 +101,7 @@ export default function AreasOfWork() {
                     </span>
                   </div>
                 </div>
+                </Link>
               </motion.div>
             );
           })()}
@@ -115,6 +117,7 @@ export default function AreasOfWork() {
                 animate={inView ? "visible" : "hidden"}
                 className="md:col-span-12 lg:col-span-5 bg-ivory border border-sand-dark flex flex-col justify-between group"
               >
+                <Link href={item.href} className="flex flex-col flex-1">
                 {item.imageUrl && (
                   <div className="relative h-64 md:h-80 w-full overflow-hidden">
                     <Image
@@ -144,6 +147,7 @@ export default function AreasOfWork() {
                     <ArrowUpRight size={16} className="text-forest" />
                   </div>
                 </div>
+                </Link>
               </motion.div>
             );
           })()}
@@ -159,6 +163,7 @@ export default function AreasOfWork() {
                 animate={inView ? "visible" : "hidden"}
                 className="md:col-span-12 lg:col-span-5 bg-ivory border border-sand-dark flex flex-col justify-between group"
               >
+                <Link href={item.href} className="flex flex-col flex-1">
                 {item.imageUrl && (
                   <div className="relative h-64 md:h-72 w-full overflow-hidden">
                     <Image
@@ -186,6 +191,7 @@ export default function AreasOfWork() {
                     <ArrowUpRight size={16} className="text-forest" />
                   </div>
                 </div>
+                </Link>
               </motion.div>
             );
           })()}
@@ -199,8 +205,9 @@ export default function AreasOfWork() {
                 variants={fadeUp}
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}
-                className="md:col-span-6 lg:col-span-3 bg-sand/30 border border-sand-dark p-8 flex flex-col justify-between group hover:bg-ivory transition-colors"
+                className="md:col-span-6 lg:col-span-3 bg-sand/30 border border-sand-dark flex flex-col justify-between group hover:bg-ivory transition-colors"
               >
+                <Link href={item.href} className="flex flex-col flex-1 p-8">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="font-serif text-3xl text-terracotta select-none">
@@ -217,6 +224,7 @@ export default function AreasOfWork() {
                 <div className="pt-6 border-t border-sand-dark text-[11px] font-sans uppercase tracking-widest text-forest font-semibold">
                   {item.meta}
                 </div>
+                </Link>
               </motion.div>
             );
           })()}
@@ -230,8 +238,9 @@ export default function AreasOfWork() {
                 variants={fadeUp}
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}
-                className="md:col-span-6 lg:col-span-4 bg-sand/30 border border-sand-dark p-8 flex flex-col justify-between group hover:bg-ivory transition-colors"
+                className="md:col-span-6 lg:col-span-4 bg-sand/30 border border-sand-dark flex flex-col justify-between group hover:bg-ivory transition-colors"
               >
+                <Link href={item.href} className="flex flex-col flex-1 p-8">
                 <div className="space-y-4">
                   <span className="font-serif text-3xl text-terracotta select-none">
                     {item.number}
@@ -246,6 +255,7 @@ export default function AreasOfWork() {
                 <div className="pt-6 border-t border-sand-dark text-[11px] font-sans uppercase tracking-widest text-forest font-semibold">
                   {item.meta}
                 </div>
+                </Link>
               </motion.div>
             );
           })()}
@@ -278,7 +288,7 @@ export default function AreasOfWork() {
                   </div>
                 </div>
                 <Link
-                  href="#initiatives"
+                  href={item.href}
                   className="px-6 py-3 border border-forest text-forest hover:bg-forest hover:text-warm-white transition-colors text-xs font-sans uppercase tracking-[0.2em] font-semibold whitespace-nowrap flex-shrink-0"
                 >
                   View Archive

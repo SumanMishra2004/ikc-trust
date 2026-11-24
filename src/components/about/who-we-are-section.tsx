@@ -101,7 +101,7 @@ export default function WhoWeAreSection() {
               className="relative w-full max-w-lg aspect-[16/9] overflow-hidden bg-sand border border-sand-dark/60 shadow-sm hidden lg:block"
             >
               <Image
-                src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=900&q=85&auto=format&fit=crop"
+                src="/about1.webp"
                 alt="IKC Trust mobile healthcare camp in rural West Bengal"
                 fill
                 sizes="(max-width: 1280px) 50vw, 40vw"
@@ -130,7 +130,7 @@ export default function WhoWeAreSection() {
               <div className="absolute -top-4 -left-4 w-full h-full bg-sand-dark/50 -z-10" />
               <div className="relative w-full aspect-square overflow-hidden bg-sand border border-sand-dark/60 shadow-xl">
                 <Image
-                  src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=900&q=85&auto=format&fit=crop"
+                  src="/about2.jpeg"
                   alt="Community volunteers at an IKC Trust outreach programme in rural West Bengal"
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"
@@ -155,7 +155,7 @@ export default function WhoWeAreSection() {
             {/* Mobile documentary vignette */}
             <div className="relative w-full aspect-[16/9] overflow-hidden bg-sand border border-sand-dark/60 shadow-sm mt-6 lg:hidden">
               <Image
-                src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=900&q=85&auto=format&fit=crop"
+                src="/about1.webp"
                 alt="IKC Trust mobile healthcare camp"
                 fill
                 sizes="100vw"

@@ -161,18 +161,13 @@ export default function HeroSection() {
                 <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
               </Link>
 
-              {/* Secondary — outline with play icon */}
+              {/* Secondary — outline */}
               <Link
                 href={hero.ctaSecondary.href}
-                className="inline-flex items-center gap-2.5 px-6 py-3 border border-[#1B3A2D]/60 text-[#1B3A2D] font-sans text-[13px] font-medium tracking-wide hover:border-[#1B3A2D] hover:bg-[#1B3A2D]/5 transition-colors duration-200"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-[#1B3A2D]/60 text-[#1B3A2D] font-sans text-[13px] font-medium tracking-wide hover:border-[#1B3A2D] hover:bg-[#1B3A2D]/5 transition-colors duration-200"
               >
-                {/* Circle play icon */}
-                <span className="inline-flex items-center justify-center w-5 h-5 border border-[#1B3A2D]/70 rounded-full flex-shrink-0">
-                  <svg width="8" height="9" viewBox="0 0 8 9" fill="none">
-                    <path d="M2 2l4 2.5L2 7V2z" fill="#1B3A2D" />
-                  </svg>
-                </span>
                 {hero.ctaSecondary.label}
+                <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
               </Link>
             </motion.div>
 

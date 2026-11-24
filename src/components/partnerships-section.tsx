@@ -88,7 +88,7 @@ export default function PartnershipsSection() {
           className="mt-12 text-center"
         >
           <Link
-            href="#contact"
+            href="/contact"
             className="inline-block px-8 py-4 bg-forest text-warm-white text-xs font-sans uppercase tracking-[0.2em] font-semibold hover:bg-terracotta transition-colors shadow-sm"
           >
             Initiate Institutional Dialogue

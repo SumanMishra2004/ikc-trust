@@ -18,7 +18,7 @@ const PLACEHOLDER_MEMBERS = [
     affiliation: "IKC Trust · Kolkata",
     photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=480&fit=crop&crop=face&auto=format&q=85",
     linkedin: "",
-    email: "contact@ikc.org.in",
+    email: "admin@ikc.org.in",
   },
   {
     _id: "ph-2",
